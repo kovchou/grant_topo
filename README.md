@@ -1,1 +1,1 @@
-a topo display component
+A topo display component.
