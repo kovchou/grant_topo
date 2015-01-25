@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - @localhost" uuid="6b78d465-4562-4f1b-87a5-4c998dd0bded">
+      <secret-storage>memory</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>topo.*</schema-pattern>
+      <default-schemas>topo.*</default-schemas>
+    </data-source>
+  </component>
+</project>
