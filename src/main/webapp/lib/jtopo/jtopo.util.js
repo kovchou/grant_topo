@@ -1,34 +1,20 @@
 (function (JTopo) {
-    function MessageBus(name) {
-        var self = this;
-        this.name = name, this.messageMap = {}, this.messageCount = 0;
-        this.subscribe = function (topic, action) {
-            var actions = self.messageMap[topic];
-            if(actions==null)
-            {
-                self.messageMap[topic] = [];
-            }
-            self.messageMap[topic].push(action);
-            self.messageCount++;
-        };
-        this.unsubscribe = function (topic) {
-            var actions = self.messageMap[topic];
-            if(null != actions) {
-                self.messageMap[topic] = null;
-                delete self.messageMap[topic];
-                self.messageCount--
-            }
-        };
-        this.publish = function (topic, data, concurrency) {
-            var actions = self.messageMap[topic];
-            if (null != actions)
-                for (var f = 0; f < actions.length; f++) {
-                    concurrency ? !function (a, b) {
-                        setTimeout(function () {
-                            a(b)
-                        }, 10)
-                    }(actions[f], data) : actions[f](data)
-                }
+    function MessageBus(a) {
+        var b = this;
+        this.name = a, this.messageMap = {}, this.messageCount = 0, this.subscribe = function (a, c) {
+            var d = b.messageMap[a];
+            null == d && (b.messageMap[a] = []), b.messageMap[a].push(c), b.messageCount++
+        }, this.unsubscribe = function (a) {
+            var c = b.messageMap[a];
+            null != c && (b.messageMap[a] = null, delete b.messageMap[a], b.messageCount--)
+        }, this.publish = function (a, c, d) {
+            var e = b.messageMap[a];
+            if (null != e)
+                for (var f = 0; f < e.length; f++) d ? ! function (a, b) {
+                    setTimeout(function () {
+                        a(b)
+                    }, 10)
+                }(e[f], c) : e[f](c)
         }
     }
 
