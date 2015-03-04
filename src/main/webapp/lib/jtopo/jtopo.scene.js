@@ -18,13 +18,19 @@
             this.visible = !0
         }, this.hide = function () {
             this.visible = !1
-        }, this.paint = function (a) {
+        }, this.paint = function (context) {
+            debugger;
             if (0 != this.visible && null != this.stage) {
-                if (a.save(), this.paintBackgroud(a), a.restore(), a.save(), a.scale(this.scaleX, this.scaleY), 1 == this.translate) {
-                    var b = this.getOffsetTranslate(a);
-                    a.translate(b.translateX, b.translateY)
+                context.save();
+                this.paintBackgroud(context);
+                context.restore();
+                context.save();
+                context.scale(this.scaleX, this.scaleY);
+                if ( 1 == this.translate) {
+                    var b = this.getOffsetTranslate(context);
+                    context.translate(b.translateX, b.translateY)
                 }
-                this.paintChilds(a), a.restore(), a.save(), this.paintOperations(a, this.operations), a.restore()
+                this.paintChilds(context), context.restore(), context.save(), this.paintOperations(context, this.operations), context.restore()
             }
         }, this.repaint = function (a) {
             0 != this.visible && this.paint(a)
@@ -144,7 +150,8 @@
             this.currentElement = b
         }, this.mousedownHandler = function (b) {
             var c = this.toSceneEvent(b);
-            if (this.mouseDown = !0, this.mouseDownX = c.x, this.mouseDownY = c.y, this.mouseDownEvent = c, this.mode == a.SceneMode.normal) this.selectElement(c), (null == this.currentElement || this.currentElement instanceof a.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY);
+            if (this.mouseDown = !0, this.mouseDownX = c.x, this.mouseDownY = c.y, this.mouseDownEvent = c, this.mode == a.SceneMode.normal)
+                this.selectElement(c), (null == this.currentElement || this.currentElement instanceof a.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY);
             else {
                 if (this.mode == a.SceneMode.drag && 1 == this.translate) return this.lastTranslateX = this.translateX, void(this.lastTranslateY = this.translateY);
                 this.mode == a.SceneMode.select ? this.selectElement(c) : this.mode == a.SceneMode.edit && (this.selectElement(c), (null == this.currentElement || this.currentElement instanceof a.Link) && 1 == this.translate && (this.lastTranslateX = this.translateX, this.lastTranslateY = this.translateY))
