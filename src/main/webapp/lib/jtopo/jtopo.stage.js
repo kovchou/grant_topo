@@ -195,43 +195,61 @@
             r[a] = function (b) {
                 null != b ? this.addEventListener(a, b) : this.dispatchEvent(a)
             }
-        }), this.saveImageInfo = function (a, b) {
+        });
+        this.saveImageInfo = function (a, b) {
             var c = this.eagleEye.getImage(a, b),
                 d = window.open("about:blank");
             return d.document.write("<img src='" + c + "' alt='from canvas'/>"), this
-        }, this.saveAsLocalImage = function (a, b) {
+        };
+        this.saveAsLocalImage = function (a, b) {
             var c = this.eagleEye.getImage(a, b);
             return c.replace("image/png", "image/octet-stream"), window.location.href = c, this
-        }, this.paint = function () {
-            null != this.canvas && (this.graphics.save(), this.graphics.clearRect(0, 0, this.width, this.height), this.childs.forEach(function (a) {
-                1 == a.visible && a.repaint(n.graphics)
-            }), 1 == this.eagleEye.visible && this.eagleEye.paint(this), this.graphics.restore())
-        }, this.repaint = function () {
+        };
+        this.paint = function () {
+            if (null != this.canvas){
+                this.graphics.save();
+                this.graphics.clearRect(0, 0, this.width, this.height);
+                this.childs.forEach(function (a) {
+                    1 == a.visible && a.repaint(n.graphics)
+                });
+                if(1 == this.eagleEye.visible){
+                  this.eagleEye.paint(this);
+                }
+                this.graphics.restore()
+            }
+        };
+        this.repaint = function () {
             0 != this.frames && (this.frames < 0 && 0 == this.needRepaint || (this.paint(), this.frames < 0 && (this.needRepaint = !1)))
-        }, this.zoom = function (a) {
+        };
+        this.zoom = function (a) {
             this.childs.forEach(function (b) {
                 0 != b.visible && b.zoom(a)
             })
-        }, this.zoomOut = function (a) {
+        };
+        this.zoomOut = function (a) {
             this.childs.forEach(function (b) {
                 0 != b.visible && b.zoomOut(a)
             })
-        }, this.zoomIn = function (a) {
+        };
+        this.zoomIn = function (a) {
             this.childs.forEach(function (b) {
                 0 != b.visible && b.zoomIn(a)
             })
-        }, this.centerAndZoom = function () {
+        };
+        this.centerAndZoom = function () {
             this.childs.forEach(function (a) {
                 0 != a.visible && a.centerAndZoom()
             })
-        }, this.setCenter = function (a, b) {
+        };
+        this.setCenter = function (a, b) {
             var c = this;
             this.childs.forEach(function (d) {
                 var e = a - c.canvas.width / 2,
                     f = b - c.canvas.height / 2;
                 d.translateX = -e, d.translateY = -f
             })
-        }, this.getBound = function () {
+        };
+        this.getBound = function () {
             var a = {
                 left: Number.MAX_VALUE,
                 right: Number.MIN_VALUE,
@@ -242,7 +260,8 @@
                 var c = b.getElementsBound();
                 c.left < a.left && (a.left = c.left, a.leftNode = c.leftNode), c.top < a.top && (a.top = c.top, a.topNode = c.topNode), c.right > a.right && (a.right = c.right, a.rightNode = c.rightNode), c.bottom > a.bottom && (a.bottom = c.bottom, a.bottomNode = c.bottomNode)
             }), a.width = a.right - a.left, a.height = a.bottom - a.top, a
-        }, this.toJson = function () {
+        };
+        this.toJson = function () {
             {
                 var b = this,
                     c = '{"version":"' + a.version + '",';
@@ -254,19 +273,33 @@
             }), c += '"childs":[', this.childs.forEach(function (a) {
                 c += a.toJson()
             }), c += "]", c += "}"
-        },
-            function () {
-                0 == n.frames ? setTimeout(arguments.callee, 100) : n.frames < 0 ? (n.repaint(), setTimeout(arguments.callee, 1e3 / -n.frames)) : (n.repaint(), setTimeout(arguments.callee, 1e3 / n.frames))
-            }(), setTimeout(function () {
+        };
+        (function () {
+            if (0== n.frames){
+                setTimeout(arguments.callee, 100)
+            }else{
+                if (n.frames <0){
+                    n.repaint();
+                    setTimeout(arguments.callee, 1000 / -n.frames)
+                }else{
+                    n.repaint();
+                    setTimeout(arguments.callee, 1000 / n.frames)
+                }
+            }
+        })();
+        setTimeout(function () {
             n.mousewheel(function (a) {
                 var b = null == a.wheelDelta ? a.detail : a.wheelDelta;
                 null != this.wheelZoom && (b > 0 ? this.zoomIn(this.wheelZoom) : this.zoomOut(this.wheelZoom))
-            }), n.paint()
-        }, 300), setTimeout(function () {
+            });
             n.paint()
-        }, 1e3), setTimeout(function () {
+        }, 300);
+        setTimeout(function () {
             n.paint()
-        }, 3e3)
+        }, 1000);
+        setTimeout(function () {
+            n.paint()
+        }, 3000)
     }
     c.prototype = {get width() {
         return this.canvas.width
