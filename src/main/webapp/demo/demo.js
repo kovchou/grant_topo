@@ -4,4 +4,5 @@
 $(document).ready(function(){
     var comp = new GrantTopo.Component();
     comp.displayTopo();
+    window.comp= comp;
 });

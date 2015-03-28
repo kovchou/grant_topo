@@ -1,11 +1,22 @@
 (function (a) {
     function b() {
         this.initialize = function () {
-            b.prototype.initialize.apply(this, arguments), this.elementType = "displayElement", this.x = 0, this.y = 0, this.width = 32, this.height = 32, this.visible = !0, this.alpha = 1, this.rotate = 0, this.scaleX = 1, this.scaleY = 1, this.strokeColor = "22,124,255", this.borderColor = "22,124,255", this.fillColor = "22,124,255", this.shadow = !1, this.shadowBlur = 5, this.shadowColor = "rgba(0,0,0,0.5)", this.shadowOffsetX = 3, this.shadowOffsetY = 6, this.transformAble = !1, this.zIndex = 0;
+            b.prototype.initialize.apply(this, arguments);
+            this.elementType = "displayElement";
+            this.x = 0, this.y = 0, this.width = 32, this.height = 32;
+            this.visible = !0, this.alpha = 1, this.rotate = 0, this.scaleX = 1, this.scaleY = 1;
+            this.strokeColor = "22,124,255", this.borderColor = "22,124,255";
+            this.fillColor = "22,124,255", this.shadow = !1, this.shadowBlur = 5;
+            this.shadowColor = "rgba(0,0,0,0.5)", this.shadowOffsetX = 3;
+            this.shadowOffsetY = 6, this.transformAble = !1, this.zIndex = 0;
             var a = "x,y,width,height,visible,alpha,rotate,scaleX,scaleY,strokeColor,fillColor,shadow,shadowColor,shadowOffsetX,shadowOffsetY,transformAble,zIndex".split(",");
             this.serializedProperties = this.serializedProperties.concat(a)
-        }, this.initialize(), this.paint = function (a) {
-            a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", a.rect(-this.width / 2, -this.height / 2, this.width, this.height), a.fill(), a.stroke(), a.closePath()
+        }, this.initialize();
+        this.paint = function (a) {
+            a.beginPath();
+            a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")";
+            a.rect(-this.width / 2, -this.height / 2, this.width, this.height);
+            a.fill(), a.stroke(), a.closePath()
         }, this.getLocation = function () {
             return {
                 x: this.x,

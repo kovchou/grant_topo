@@ -19,7 +19,6 @@
         }, this.hide = function () {
             this.visible = !1
         }, this.paint = function (context) {
-            debugger;
             if (0 != this.visible && null != this.stage) {
                 context.save();
                 this.paintBackgroud(context);
@@ -30,7 +29,11 @@
                     var b = this.getOffsetTranslate(context);
                     context.translate(b.translateX, b.translateY)
                 }
-                this.paintChilds(context), context.restore(), context.save(), this.paintOperations(context, this.operations), context.restore()
+                this.paintChilds(context);
+                context.restore();
+                context.save();
+                this.paintOperations(context, this.operations);
+                context.restore()
             }
         }, this.repaint = function (a) {
             0 != this.visible && this.paint(a)
@@ -49,19 +52,44 @@
                 d instanceof a.Node && this.isVisiable(d) && b.push(d)
             }
             return b
-        }, this.paintChilds = function (b) {
+        };
+        this.paintChilds = function (context) {
             for (var c = 0; c < this.zIndexArray.length; c++)
                 for (var d = this.zIndexArray[c], e = this.zIndexMap[d], f = 0; f < e.length; f++) {
                     var g = e[f];
                     if (1 == this.paintAll || this.isVisiable(g)) {
-                        if (b.save(), 1 == g.transformAble) {
+                        context.save();
+                        if (1 == g.transformAble) {
                             var h = g.getCenterLocation();
-                            b.translate(h.x, h.y), g.rotate && b.rotate(g.rotate), g.scaleX && g.scaleY ? b.scale(g.scaleX, g.scaleY) : g.scaleX ? b.scale(g.scaleX, 1) : g.scaleY && b.scale(1, g.scaleY)
+                            context.translate(h.x, h.y);
+                            g.rotate && context.rotate(g.rotate);
+                            if(g.scaleX){
+                                if(g.scaleY){
+                                    context.scale(g.scaleX, g.scaleY)
+                                }else{
+                                    if(g.scaleX){
+                                        context.scale(g.scaleX, 1)
+                                    }else{
+                                        g.scaleY && context.scale(1, g.scaleY)
+                                    }
+                                }
+                            }
                         }
-                        1 == g.shadow && (b.shadowBlur = g.shadowBlur, b.shadowColor = g.shadowColor, b.shadowOffsetX = g.shadowOffsetX, b.shadowOffsetY = g.shadowOffsetY), g instanceof a.InteractiveElement && (g.selected && 1 == g.showSelected && g.paintSelected(b), 1 == g.isMouseOver && g.paintMouseover(b)), g.paint(b), b.restore()
+                        if(1 == g.shadow) {
+                            context.shadowBlur = g.shadowBlur;
+                            context.shadowColor = g.shadowColor;
+                            context.shadowOffsetX = g.shadowOffsetX;
+                            context.shadowOffsetY = g.shadowOffsetY;
+                        }
+                        if(g instanceof a.InteractiveElement){
+                            (g.selected && 1 == g.showSelected && g.paintSelected(context), 1 == g.isMouseOver && g.paintMouseover(context));
+                        }
+                        g.paint(context);
+                        context.restore()
                     }
                 }
-        }, this.getOffsetTranslate = function (a) {
+        };
+        this.getOffsetTranslate = function (a) {
             var b = this.stage.canvas.width,
                 c = this.stage.canvas.height;
             null != a && "move" != a && (b = a.canvas.width, c = a.canvas.height);
@@ -73,15 +101,20 @@
                 };
             return f
         }, this.isVisiable = function (b) {
-            if (1 != b.visible) return !1;
-            if (b instanceof a.Link) return !0;
+            if (!b.visible){
+                return false;
+            }
+            if (b instanceof a.Link) {
+                return false
+            };
             var c = this.getOffsetTranslate(),
                 d = b.x + c.translateX,
                 e = b.y + c.translateY;
             d *= this.scaleX, e *= this.scaleY;
             var f = d + b.width * this.scaleX,
                 g = e + b.height * this.scaleY;
-            return d > this.stage.canvas.width || e > this.stage.canvas.height || 0 > f || 0 > g ? !1 : !0
+
+            return d > this.stage.canvas.width || e > this.stage.canvas.height || 0 > f || 0 > g ? false : true
         }, this.paintOperations = function (a, b) {
             for (var c = 0; c < b.length; c++) b[c](a)
         }, this.findElements = function (a) {
@@ -196,9 +229,29 @@
             };
             var c = this.toSceneEvent(b);
             if (this.mode == a.SceneMode.drag) return void(this.stage.cursor = a.MouseCursor.open_hand);
-            this.mode == a.SceneMode.normal ? this.stage.cursor = a.MouseCursor.normal : this.mode == a.SceneMode.select && (this.stage.cursor = a.MouseCursor.normal);
+            if(this.mode == a.SceneMode.normal){
+                this.stage.cursor = a.MouseCursor.normal
+            }else{
+                this.mode == a.SceneMode.select && (this.stage.cursor = a.MouseCursor.normal);
+            }
+
             var d = e.getElementByXY(c.x, c.y);
-            null != d ? (e.mouseOverelement && e.mouseOverelement !== d && (c.target = d, e.mouseOverelement.mouseoutHandler(c)), e.mouseOverelement = d, 0 == d.isMouseOver ? (c.target = d, d.mouseoverHandler(c), e.dispatchEvent("mouseover", c)) : (c.target = d, d.mousemoveHandler(c), e.dispatchEvent("mousemove", c))) : e.mouseOverelement ? (c.target = d, e.mouseOverelement.mouseoutHandler(c), e.mouseOverelement = null, e.dispatchEvent("mouseout", c)) : (c.target = null, e.dispatchEvent("mousemove", c))
+            if(null != d){
+                e.mouseOverelement && e.mouseOverelement !== d && (c.target = d, e.mouseOverelement.mouseoutHandler(c));
+                e.mouseOverelement = d;
+                if(0 == d.isMouseOver){
+                    (c.target = d, d.mouseoverHandler(c), e.dispatchEvent("mouseover", c))
+                }else{
+                    (c.target = d, d.mousemoveHandler(c), e.dispatchEvent("mousemove", c))
+                }
+            }else{
+                if(e.mouseOverelement){
+                    (c.target = d, e.mouseOverelement.mouseoutHandler(c), e.mouseOverelement = null, e.dispatchEvent("mouseout", c))
+                }else{
+                    (c.target = null, e.dispatchEvent("mousemove", c))
+                }
+
+            }
         }, this.mouseoverHandler = function (a) {
             var b = this.toSceneEvent(a);
             this.dispatchEvent("mouseover", b)

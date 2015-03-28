@@ -4,13 +4,15 @@
             b.prototype.initialize.apply(this, arguments), this.elementType = "node", this.zIndex = a.zIndex_Node, this.text = c, this.font = "12px Consolas", this.fontColor = "255,255,255", this.borderWidth = 0, this.borderColor = "255,255,255", this.borderRadius = null, this.dragable = !0, this.textPosition = "Bottom_Center", this.textOffsetX = 0, this.textOffsetY = 0, this.transformAble = !0, this.inLinks = null, this.outLinks = null;
             var d = "text,font,fontColor,textPosition,textOffsetX,textOffsetY,borderRadius".split(",");
             this.serializedProperties = this.serializedProperties.concat(d)
-        }, this.initialize(c), this.paint = function (a) {
+        }, this.initialize(c);
+        this.paint = function (a) {
             if (this.image) {
                 var b = a.globalAlpha;
                 a.globalAlpha = this.alpha, null != this.image.alarm && null != this.alarm ? a.drawImage(this.image.alarm, -this.width / 2, -this.height / 2, this.width, this.height) : a.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height), a.globalAlpha = b
             } else a.beginPath(), a.fillStyle = "rgba(" + this.fillColor + "," + this.alpha + ")", null == this.borderRadius || 0 == this.borderRadius ? a.rect(-this.width / 2, -this.height / 2, this.width, this.height) : a.JTopoRoundRect(-this.width / 2, -this.height / 2, this.width, this.height, this.borderRadius), a.fill(), a.closePath();
             this.paintText(a), this.paintBorder(a), this.paintCtrl(a), this.paintAlarmText(a)
-        }, this.paintAlarmText = function (a) {
+        };
+        this.paintAlarmText = function (a) {
             if (null != this.alarm && "" != this.alarm) {
                 var b = this.alarmColor || "255,0,0",
                     c = this.alarmAlpha || .5;

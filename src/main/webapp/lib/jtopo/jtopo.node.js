@@ -10,13 +10,11 @@
                 a.save(), a.beginPath(), a.fillStyle = b.colors[f], a.moveTo(0, 0), a.arc(0, 0, this.radius, e, e + g, !1), a.fill(), a.closePath(), a.restore(), a.beginPath(), a.font = this.font;
                 var h = this.titles[f] + ": " + (100 * this.datas[f])
                             .toFixed(2) + "%",
-                    i = a.measureText(h)
-                        .width,
-                    j = (a.measureText("ç”°")
-                        .width, (e + e + g) / 2),
-                    k = this.radius * Math.cos(j),
+                    i = a.measureText(h).width;
+                    j = ((e + e + g) / 2);
+                    k = this.radius * Math.cos(j);
                     l = this.radius * Math.sin(j);
-                j > Math.PI / 2 && j <= Math.PI ? k -= i : j > Math.PI && j < 2 * Math.PI * 3 / 4 ? k -= i : j > 2 * Math.PI * .75, a.fillStyle = "#FFFFFF", a.fillText(h, k, l), a.moveTo(this.radius * Math.cos(j), this.radius * Math.sin(j)), j > Math.PI / 2 && j < 2 * Math.PI * 3 / 4 && (k -= i), j > Math.PI, a.fill(), a.stroke(), a.closePath(), e += g
+                    j > Math.PI / 2 && j <= Math.PI ? k -= i : j > Math.PI && j < 2 * Math.PI * 3 / 4 ? k -= i : j > 2 * Math.PI * .75, a.fillStyle = "#FFFFFF", a.fillText(h, k, l), a.moveTo(this.radius * Math.cos(j), this.radius * Math.sin(j)), j > Math.PI / 2 && j < 2 * Math.PI * 3 / 4 && (k -= i), j > Math.PI, a.fill(), a.stroke(), a.closePath(), e += g
             }
         }, b
     }
